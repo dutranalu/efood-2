@@ -40,6 +40,9 @@ const Text = styled.p`
 
 function Confirmation() {
   const orderId = useSelector((state) => state.order.orderId);
+  const lastRestaurantId = useSelector(
+    (state) => state.order.lastRestaurantId
+  );
 
   return (
     <Overlay>
@@ -61,7 +64,7 @@ function Confirmation() {
           Esperamos que desfrute de uma deliciosa e agradavel experiencia
           gastronomica. Bom apetite!
         </Text>
-        <Link to="/">
+        <Link to={lastRestaurantId ? `/perfil/${lastRestaurantId}` : '/'}>
           <LightButton>Concluir</LightButton>
         </Link>
       </Panel>

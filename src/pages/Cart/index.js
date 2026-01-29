@@ -81,6 +81,9 @@ const Total = styled.div`
 function Cart() {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
+  const lastRestaurantId = useSelector(
+    (state) => state.order.lastRestaurantId
+  );
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -114,7 +117,7 @@ function Cart() {
         <Link to="/entrega">
           <LightButton>Continuar com a entrega</LightButton>
         </Link>
-        <Link to="/perfil/1">
+        <Link to={lastRestaurantId ? `/perfil/${lastRestaurantId}` : '/'}>
           <InverseOutlineButton>Voltar para o cardapio</InverseOutlineButton>
         </Link>
       </Panel>

@@ -19,6 +19,7 @@ const orderSlice = createSlice({
       expiresYear: '',
     },
     orderId: '',
+    lastRestaurantId: null,
   },
   reducers: {
     setDelivery: (state, action) => {
@@ -30,6 +31,9 @@ const orderSlice = createSlice({
     setOrderId: (state, action) => {
       state.orderId = action.payload;
     },
+    setLastRestaurantId: (state, action) => {
+      state.lastRestaurantId = action.payload;
+    },
     clearOrder: (state) => {
       state.orderId = '';
     },
@@ -38,4 +42,5 @@ const orderSlice = createSlice({
 
 export const { setDelivery, setPayment, setOrderId, clearOrder } =
   orderSlice.actions;
+export const { setLastRestaurantId } = orderSlice.actions;
 export default orderSlice.reducer;

@@ -8,6 +8,7 @@ import {
   InverseOutlineButton,
 } from '../../styles/components';
 import { addItem } from '../../store/cartSlice';
+import { setLastRestaurantId } from '../../store/orderSlice';
 
 const Page = styled.main`
   background: ${({ theme }) => theme.colors.background};
@@ -69,22 +70,6 @@ const MenuSection = styled.section`
   padding: 40px 0 80px;
 `;
 
-const MenuBlock = styled.div`
-  display: grid;
-  gap: 20px;
-
-  & + & {
-    margin-top: 32px;
-  }
-`;
-
-const MenuTitle = styled.h2`
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-`;
-
 const Grid = styled.div`
   display: grid;
   gap: 20px;
@@ -116,13 +101,6 @@ const CardTitle = styled.h3`
 const CardText = styled.p`
   font-size: 12px;
   opacity: 0.9;
-`;
-
-const CardCategory = styled.span`
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  opacity: 0.85;
 `;
 
 const ModalOverlay = styled.div`
@@ -176,17 +154,6 @@ const ModalClose = styled.button`
   font-size: 20px;
 `;
 
-const sweetKeywords = [
-  'chocolate',
-  'doce',
-  'banana',
-  'brigadeiro',
-  'romeu',
-  'morango',
-  'nutella',
-  'caramelo',
-];
-
 const formatPrice = (value) =>
   `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
 
@@ -208,18 +175,19 @@ function Profile() {
         const response = await fetch(
           'https://api-ebac.vercel.app/api/efood/restaurantes'
         );
-        if (!response.ok) {
-          throw new Error('Erro ao carregar restaurante');
+      if (!response.ok) {
+        throw new Error('Erro ao carregar restaurante');
+      }
+      const data = await response.json();
+      const found = data.find((item) => String(item.id) === String(id));
+      if (isMounted) {
+        if (!found) {
+          setError('Restaurante nao encontrado.');
+        } else {
+          setRestaurant(found);
+          dispatch(setLastRestaurantId(found.id));
         }
-        const data = await response.json();
-        const found = data.find((item) => String(item.id) === String(id));
-        if (isMounted) {
-          if (!found) {
-            setError('Restaurante nao encontrado.');
-          } else {
-            setRestaurant(found);
-          }
-        }
+      }
       } catch (err) {
         if (isMounted) {
           setError('Nao foi possivel carregar o restaurante.');
@@ -238,25 +206,9 @@ function Profile() {
     };
   }, [id]);
 
-  const menu = restaurant?.cardapio ?? [];
-  const savory = useMemo(
-    () =>
-      menu.filter(
-        (item) =>
-          !sweetKeywords.some((word) =>
-            item.nome?.toLowerCase().includes(word)
-          )
-      ),
-    [menu]
-  );
-  const sweet = useMemo(
-    () =>
-      menu.filter((item) =>
-        sweetKeywords.some((word) =>
-          item.nome?.toLowerCase().includes(word)
-        )
-      ),
-    [menu]
+  const menu = useMemo(
+    () => restaurant?.cardapio ?? [],
+    [restaurant]
   );
 
   const handleBuy = (item) => {
@@ -307,15 +259,15 @@ function Profile() {
 
           <MenuSection>
             <Container>
-              <MenuBlock>
-                <MenuTitle>Pizzas salgadas</MenuTitle>
-                {savory.length === 0 && <p>Sem opcoes salgadas.</p>}
+              {menu.length === 0 && (
+                <p>Este restaurante nao possui itens no cardapio.</p>
+              )}
+              {menu.length > 0 && (
                 <Grid>
-                  {savory.map((item) => (
+                  {menu.map((item) => (
                     <Card key={item.id}>
                       <CardImage src={item.foto} alt={item.nome} />
                       <CardTitle>{item.nome}</CardTitle>
-                      <CardCategory>Salgada</CardCategory>
                       <CardText>{item.descricao}</CardText>
                       <LightButton onClick={() => handleBuy(item)}>
                         Comprar o produto
@@ -323,25 +275,7 @@ function Profile() {
                     </Card>
                   ))}
                 </Grid>
-              </MenuBlock>
-
-              <MenuBlock>
-                <MenuTitle>Pizzas doces</MenuTitle>
-                {sweet.length === 0 && <p>Sem opcoes doces.</p>}
-                <Grid>
-                  {sweet.map((item) => (
-                    <Card key={item.id}>
-                      <CardImage src={item.foto} alt={item.nome} />
-                      <CardTitle>{item.nome}</CardTitle>
-                      <CardCategory>Doce</CardCategory>
-                      <CardText>{item.descricao}</CardText>
-                      <LightButton onClick={() => handleBuy(item)}>
-                        Comprar o produto
-                      </LightButton>
-                    </Card>
-                  ))}
-                </Grid>
-              </MenuBlock>
+              )}
             </Container>
           </MenuSection>
         </>

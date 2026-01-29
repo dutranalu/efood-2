@@ -60,6 +60,9 @@ function Delivery() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const savedDelivery = useSelector((state) => state.order.delivery);
+  const lastRestaurantId = useSelector(
+    (state) => state.order.lastRestaurantId
+  );
   const [form, setForm] = useState({
     receiver: savedDelivery.receiver,
     address: savedDelivery.address,
@@ -140,6 +143,9 @@ function Delivery() {
           </LightButton>
           <Link to="/carrinho">
             <InverseOutlineButton>Voltar para o carrinho</InverseOutlineButton>
+          </Link>
+          <Link to={lastRestaurantId ? `/perfil/${lastRestaurantId}` : '/'}>
+            <InverseOutlineButton>Voltar para o cardapio</InverseOutlineButton>
           </Link>
         </Actions>
       </Panel>

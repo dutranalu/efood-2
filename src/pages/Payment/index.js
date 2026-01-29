@@ -68,6 +68,9 @@ function Payment() {
   const delivery = useSelector((state) => state.order.delivery);
   const cartItems = useSelector((state) => state.cart.items);
   const savedPayment = useSelector((state) => state.order.payment);
+  const lastRestaurantId = useSelector(
+    (state) => state.order.lastRestaurantId
+  );
   const [form, setForm] = useState({
     name: savedPayment.name,
     number: savedPayment.number,
@@ -212,6 +215,9 @@ function Payment() {
             <InverseOutlineButton>
               Voltar para a edicao de endereco
             </InverseOutlineButton>
+          </Link>
+          <Link to={lastRestaurantId ? `/perfil/${lastRestaurantId}` : '/'}>
+            <InverseOutlineButton>Voltar para o cardapio</InverseOutlineButton>
           </Link>
         </Actions>
       </Panel>

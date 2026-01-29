@@ -139,35 +139,6 @@ const Dot = styled.span`
   display: inline-block;
 `;
 
-const sweetKeywords = [
-  'chocolate',
-  'doce',
-  'banana',
-  'brigadeiro',
-  'romeu',
-  'morango',
-  'nutella',
-  'caramelo',
-];
-
-const getTagsFromMenu = (menu = []) => {
-  const hasSweet = menu.some((item) =>
-    sweetKeywords.some((word) =>
-      item.nome?.toLowerCase().includes(word)
-    )
-  );
-  const hasSavory = menu.some(
-    (item) =>
-      !sweetKeywords.some((word) =>
-        item.nome?.toLowerCase().includes(word)
-      )
-  );
-
-  if (hasSweet && hasSavory) return ['Salgada', 'Doce'];
-  if (hasSweet) return ['Doce'];
-  return ['Salgada'];
-};
-
 function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -208,11 +179,7 @@ function Home() {
 
   const cards = useMemo(
     () =>
-      restaurants
-        .filter((item) =>
-          item.tipo?.toLowerCase().includes('pizz')
-        )
-        .map((item) => ({
+      restaurants.map((item) => ({
         id: item.id,
         name: item.titulo,
         desc: item.descricao,
@@ -220,7 +187,7 @@ function Home() {
         image: item.capa,
         tags: [
           ...(item.destacado ? ['Destaque da semana'] : []),
-          ...getTagsFromMenu(item.cardapio),
+          item.tipo,
         ],
       })),
     [restaurants]
@@ -244,7 +211,7 @@ function Home() {
           {!loading && !error && (
             <>
               {cards.length === 0 && (
-                <p>Nao encontramos pizzarias no momento.</p>
+                <p>Nao encontramos restaurantes no momento.</p>
               )}
               {cards.length > 0 && (
                 <Grid>
