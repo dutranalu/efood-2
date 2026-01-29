@@ -235,11 +235,11 @@ function Profile() {
   );
 
   return (
-    <Page>
-      <TopBar>
-        <TopBarContent>
+    <Page className="profile-page">
+      <TopBar className="profile-topbar">
+        <TopBarContent className="profile-topbar-content">
           <Link to="/">Restaurantes</Link>
-          <Logo>efood</Logo>
+          <Logo className="home-logo">efood</Logo>
           <Link to="/carrinho">
             {cartCount} produto(s) no carrinho
           </Link>
@@ -250,25 +250,33 @@ function Profile() {
       {!loading && error && <p>{error}</p>}
       {!loading && !error && restaurant && (
         <>
-          <Hero $image={restaurant.capa}>
-            <HeroContent>
+          <Hero className="profile-hero" $image={restaurant.capa}>
+            <HeroContent className="profile-hero-content">
               <HeroTag>{restaurant.tipo}</HeroTag>
               <HeroTitle>{restaurant.titulo}</HeroTitle>
             </HeroContent>
           </Hero>
 
-          <MenuSection>
+          <MenuSection className="profile-menu">
             <Container>
               {menu.length === 0 && (
                 <p>Este restaurante nao possui itens no cardapio.</p>
               )}
               {menu.length > 0 && (
-                <Grid>
+                <Grid className="profile-grid">
                   {menu.map((item) => (
-                    <Card key={item.id}>
-                      <CardImage src={item.foto} alt={item.nome} />
-                      <CardTitle>{item.nome}</CardTitle>
-                      <CardText>{item.descricao}</CardText>
+                    <Card key={item.id} className="profile-card">
+                      <CardImage
+                        className="profile-card-image"
+                        src={item.foto}
+                        alt={item.nome}
+                      />
+                      <CardTitle className="profile-card-title">
+                        {item.nome}
+                      </CardTitle>
+                      <CardText className="profile-card-text">
+                        {item.descricao}
+                      </CardText>
                       <LightButton onClick={() => handleBuy(item)}>
                         Comprar o produto
                       </LightButton>
@@ -281,29 +289,34 @@ function Profile() {
         </>
       )}
 
-      <ModalOverlay $open={open}>
-        <ModalCard>
-          <div>
-            {selectedItem && (
-              <ModalImage src={selectedItem.foto} alt={selectedItem.nome} />
-            )}
-          </div>
-          <ModalContent>
-            <h2>{selectedItem?.nome}</h2>
-            <p>{selectedItem?.descricao}</p>
-            <p>Serve: {selectedItem?.porcao}</p>
-            <ModalActions>
-              <LightButton onClick={handleAddToCart}>
-                Comprar o produto - {formatPrice(selectedItem?.preco ?? 0)}
-              </LightButton>
-              <InverseOutlineButton onClick={() => setOpen(false)}>
-                Fechar
-              </InverseOutlineButton>
-            </ModalActions>
-          </ModalContent>
-          <ModalClose onClick={() => setOpen(false)}>x</ModalClose>
-        </ModalCard>
-      </ModalOverlay>
+      {open && (
+        <ModalOverlay className="profile-modal-overlay" $open={open}>
+          <ModalCard className="profile-modal-card">
+            <div>
+              {selectedItem && (
+                <ModalImage
+                  src={selectedItem.foto}
+                  alt={selectedItem.nome}
+                />
+              )}
+            </div>
+            <ModalContent>
+              <h2>{selectedItem?.nome}</h2>
+              <p>{selectedItem?.descricao}</p>
+              <p>Serve: {selectedItem?.porcao}</p>
+              <ModalActions>
+                <LightButton onClick={handleAddToCart}>
+                  Comprar o produto - {formatPrice(selectedItem?.preco ?? 0)}
+                </LightButton>
+                <InverseOutlineButton onClick={() => setOpen(false)}>
+                  Fechar
+                </InverseOutlineButton>
+              </ModalActions>
+            </ModalContent>
+            <ModalClose onClick={() => setOpen(false)}>x</ModalClose>
+          </ModalCard>
+        </ModalOverlay>
+      )}
     </Page>
   );
 }

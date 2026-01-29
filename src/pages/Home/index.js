@@ -194,17 +194,17 @@ function Home() {
   );
 
   return (
-    <Page>
-      <Hero>
-        <HeroContent>
-          <Logo>efood</Logo>
-          <HeroText>
+    <Page className="home-page">
+      <Hero className="home-hero">
+        <HeroContent className="home-hero-content">
+          <Logo className="home-logo">efood</Logo>
+          <HeroText className="home-hero-text">
             Viva experiencias gastronomicas no conforto da sua casa
           </HeroText>
         </HeroContent>
       </Hero>
 
-      <CardsSection>
+      <CardsSection className="home-cards">
         <Container>
           {loading && <p>Carregando restaurantes...</p>}
           {!loading && error && <p>{error}</p>}
@@ -214,23 +214,35 @@ function Home() {
                 <p>Nao encontramos restaurantes no momento.</p>
               )}
               {cards.length > 0 && (
-                <Grid>
+                <Grid className="home-grid">
                   {cards.map((item) => (
-                    <Card key={item.id}>
-                      <CardMedia>
-                        <CardImage src={item.image} alt={item.name} />
-                        <BadgeGroup>
+                    <Card key={item.id} className="home-card">
+                      <CardMedia className="home-card-media">
+                        <CardImage
+                          className="home-card-image"
+                          src={item.image}
+                          alt={item.name}
+                        />
+                        <BadgeGroup className="home-badges">
                           {item.tags.map((tag) => (
-                            <Tag key={tag}>{tag}</Tag>
+                            <Tag key={tag} className="home-tag">
+                              {tag}
+                            </Tag>
                           ))}
                         </BadgeGroup>
                       </CardMedia>
-                      <CardBody>
-                        <CardHeader>
-                          <CardTitle>{item.name}</CardTitle>
-                          <Rating>{item.rating} *</Rating>
+                      <CardBody className="home-card-body">
+                        <CardHeader className="home-card-header">
+                          <CardTitle className="home-card-title">
+                            {item.name}
+                          </CardTitle>
+                          <Rating className="home-card-rating">
+                            {item.rating} *
+                          </Rating>
                         </CardHeader>
-                        <CardText>{item.desc}</CardText>
+                        <CardText className="home-card-text">
+                          {item.desc}
+                        </CardText>
                         <Link to={`/perfil/${item.id}`}>
                           <PrimaryButton>Saiba mais</PrimaryButton>
                         </Link>
@@ -244,12 +256,12 @@ function Home() {
         </Container>
       </CardsSection>
 
-      <Footer>
-        <Logo>efood</Logo>
-        <Social>
-          <Dot />
-          <Dot />
-          <Dot />
+      <Footer className="home-footer">
+        <Logo className="home-logo">efood</Logo>
+        <Social className="home-social">
+          <Dot className="home-dot" />
+          <Dot className="home-dot" />
+          <Dot className="home-dot" />
         </Social>
       </Footer>
     </Page>

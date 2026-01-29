@@ -45,8 +45,8 @@ function Confirmation() {
   );
 
   return (
-    <Overlay>
-      <Panel>
+    <Overlay className="panel-overlay">
+      <Panel className="panel">
         <Title>Pedido realizado - {orderId || 'SEM_ID'}</Title>
         <Text>
           Estamos felizes em informar que seu pedido ja esta em processo de

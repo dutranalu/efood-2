@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div.attrs({ className: 'app-container' })`
   max-width: ${({ theme }) => theme.layout.maxWidth}px;
   margin: 0 auto;
   padding: 0 24px;
@@ -14,7 +14,9 @@ export const SectionTitle = styled.h2`
   letter-spacing: 0.6px;
 `;
 
-export const PrimaryButton = styled.button`
+export const PrimaryButton = styled.button.attrs({
+  className: 'primary-button',
+})`
   background: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
   padding: 10px 16px;
@@ -28,7 +30,9 @@ export const PrimaryButton = styled.button`
   }
 `;
 
-export const OutlineButton = styled.button`
+export const OutlineButton = styled.button.attrs({
+  className: 'outline-button',
+})`
   background: transparent;
   color: ${({ theme }) => theme.colors.primary};
   border: 1px solid ${({ theme }) => theme.colors.primary};
@@ -38,7 +42,9 @@ export const OutlineButton = styled.button`
   font-size: 14px;
 `;
 
-export const LightButton = styled.button`
+export const LightButton = styled.button.attrs({
+  className: 'light-button',
+})`
   background: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.primary};
   padding: 10px 16px;
@@ -47,7 +53,9 @@ export const LightButton = styled.button`
   font-size: 14px;
 `;
 
-export const InverseOutlineButton = styled.button`
+export const InverseOutlineButton = styled.button.attrs({
+  className: 'inverse-outline-button',
+})`
   background: transparent;
   color: ${({ theme }) => theme.colors.white};
   border: 1px solid ${({ theme }) => theme.colors.white};

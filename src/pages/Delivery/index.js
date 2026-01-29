@@ -83,8 +83,8 @@ function Delivery() {
   };
 
   return (
-    <Overlay>
-      <Panel>
+    <Overlay className="panel-overlay">
+      <Panel className="panel">
         <Title>Entrega</Title>
         <Field>
           <Label>Quem ira receber</Label>

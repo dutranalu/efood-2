@@ -93,8 +93,8 @@ function Cart() {
     `R$ ${value.toFixed(2).replace('.', ',')}`;
 
   return (
-    <Overlay>
-      <Panel>
+    <Overlay className="panel-overlay">
+      <Panel className="panel">
         <h3>Carrinho</h3>
         {items.length === 0 && <p>Seu carrinho esta vazio.</p>}
         {items.map((item) => (

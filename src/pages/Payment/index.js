@@ -157,8 +157,8 @@ function Payment() {
   };
 
   return (
-    <Overlay>
-      <Panel>
+    <Overlay className="panel-overlay">
+      <Panel className="panel">
         <Title>
           Pagamento - Valor a pagar {formatPrice(total)}
         </Title>

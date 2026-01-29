@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import App from './App';
+import './fallback.css';
 import { GlobalStyle } from './styles/GlobalStyle';
 import theme from './styles/theme';
 import store from './store';
