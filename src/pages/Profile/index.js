@@ -204,7 +204,7 @@ function Profile() {
     return () => {
       isMounted = false;
     };
-  }, [id]);
+  }, [id, dispatch]);
 
   const menu = useMemo(
     () => restaurant?.cardapio ?? [],
