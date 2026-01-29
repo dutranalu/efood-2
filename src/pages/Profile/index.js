@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   LightButton,
   InverseOutlineButton,
 } from '../../styles/components';
+import { addItem } from '../../store/cartSlice';
 
 const Page = styled.main`
   background: ${({ theme }) => theme.colors.background};
@@ -190,6 +192,8 @@ const formatPrice = (value) =>
 
 function Profile() {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
   const [open, setOpen] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -260,13 +264,33 @@ function Profile() {
     setOpen(true);
   };
 
+  const handleAddToCart = () => {
+    if (!selectedItem) return;
+    dispatch(
+      addItem({
+        id: selectedItem.id,
+        name: selectedItem.nome,
+        price: Number(selectedItem.preco),
+        image: selectedItem.foto,
+      })
+    );
+    setOpen(false);
+  };
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
     <Page>
       <TopBar>
         <TopBarContent>
           <Link to="/">Restaurantes</Link>
           <Logo>efood</Logo>
-          <Link to="/carrinho">0 produto(s) no carrinho</Link>
+          <Link to="/carrinho">
+            {cartCount} produto(s) no carrinho
+          </Link>
         </TopBarContent>
       </TopBar>
 
@@ -335,7 +359,7 @@ function Profile() {
             <p>{selectedItem?.descricao}</p>
             <p>Serve: {selectedItem?.porcao}</p>
             <ModalActions>
-              <LightButton>
+              <LightButton onClick={handleAddToCart}>
                 Comprar o produto - {formatPrice(selectedItem?.preco ?? 0)}
               </LightButton>
               <InverseOutlineButton onClick={() => setOpen(false)}>

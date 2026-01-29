@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { LightButton, InverseOutlineButton } from '../../styles/components';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  LightButton,
+  InverseOutlineButton,
+} from '../../styles/components';
+import { removeItem } from '../../store/cartSlice';
 
 const Overlay = styled.main`
   min-height: 100vh;
@@ -37,10 +42,10 @@ const Item = styled.div`
   gap: 10px;
 `;
 
-const ItemImage = styled.div`
+const ItemImage = styled.img`
   width: 64px;
   height: 64px;
-  background: linear-gradient(120deg, #d9d9d9, #ffffff);
+  object-fit: cover;
   border-radius: 6px;
 `;
 
@@ -53,6 +58,20 @@ const ItemPrice = styled.span`
   font-size: 12px;
 `;
 
+const Quantity = styled.span`
+  font-size: 12px;
+  opacity: 0.8;
+`;
+
+const RemoveButton = styled.button`
+  background: transparent;
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 12px;
+  text-align: left;
+  padding: 0;
+  margin-top: 4px;
+`;
+
 const Total = styled.div`
   display: flex;
   justify-content: space-between;
@@ -60,27 +79,37 @@ const Total = styled.div`
 `;
 
 function Cart() {
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.cart.items);
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const formatPrice = (value) =>
+    `R$ ${value.toFixed(2).replace('.', ',')}`;
+
   return (
     <Overlay>
       <Panel>
         <h3>Carrinho</h3>
-        <Item>
-          <ItemImage />
-          <div>
-            <ItemTitle>Pizza Marguerita</ItemTitle>
-            <ItemPrice>R$ 60,90</ItemPrice>
-          </div>
-        </Item>
-        <Item>
-          <ItemImage />
-          <div>
-            <ItemTitle>Pizza Calabresa</ItemTitle>
-            <ItemPrice>R$ 58,90</ItemPrice>
-          </div>
-        </Item>
+        {items.length === 0 && <p>Seu carrinho esta vazio.</p>}
+        {items.map((item) => (
+          <Item key={item.id}>
+            <ItemImage src={item.image} alt={item.name} />
+            <div>
+              <ItemTitle>{item.name}</ItemTitle>
+              <Quantity>Qtd: {item.quantity}</Quantity>
+              <ItemPrice>{formatPrice(item.price)}</ItemPrice>
+              <RemoveButton onClick={() => dispatch(removeItem(item.id))}>
+                Remover
+              </RemoveButton>
+            </div>
+          </Item>
+        ))}
         <Total>
           <span>Valor total</span>
-          <span>R$ 119,80</span>
+          <span>{formatPrice(total)}</span>
         </Total>
         <Link to="/entrega">
           <LightButton>Continuar com a entrega</LightButton>
