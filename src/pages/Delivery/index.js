@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Input,
   Label,
   LightButton,
   InverseOutlineButton,
 } from '../../styles/components';
+import { setDelivery } from '../../store/orderSlice';
 
 const Overlay = styled.main`
   min-height: 100vh;
@@ -55,40 +57,87 @@ const Actions = styled.div`
 `;
 
 function Delivery() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const savedDelivery = useSelector((state) => state.order.delivery);
+  const [form, setForm] = useState({
+    receiver: savedDelivery.receiver,
+    address: savedDelivery.address,
+    city: savedDelivery.city,
+    zipCode: savedDelivery.zipCode,
+    number: savedDelivery.number,
+    complement: savedDelivery.complement,
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleContinue = () => {
+    dispatch(setDelivery(form));
+    navigate('/pagamento');
+  };
+
   return (
     <Overlay>
       <Panel>
         <Title>Entrega</Title>
         <Field>
           <Label>Quem ira receber</Label>
-          <Input placeholder="Joao Paulo de Souza" />
+          <Input
+            name="receiver"
+            value={form.receiver}
+            onChange={handleChange}
+            placeholder="Joao Paulo de Souza"
+          />
         </Field>
         <Field>
           <Label>Endereco</Label>
-          <Input />
+          <Input
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Cidade</Label>
-          <Input />
+          <Input
+            name="city"
+            value={form.city}
+            onChange={handleChange}
+          />
         </Field>
         <Row>
           <Field>
             <Label>CEP</Label>
-            <Input />
+            <Input
+              name="zipCode"
+              value={form.zipCode}
+              onChange={handleChange}
+            />
           </Field>
           <Field>
             <Label>Numero</Label>
-            <Input />
+            <Input
+              name="number"
+              value={form.number}
+              onChange={handleChange}
+            />
           </Field>
         </Row>
         <Field>
           <Label>Complemento (opcional)</Label>
-          <Input />
+          <Input
+            name="complement"
+            value={form.complement}
+            onChange={handleChange}
+          />
         </Field>
         <Actions>
-          <Link to="/pagamento">
-            <LightButton>Continuar com o pagamento</LightButton>
-          </Link>
+          <LightButton onClick={handleContinue}>
+            Continuar com o pagamento
+          </LightButton>
           <Link to="/carrinho">
             <InverseOutlineButton>Voltar para o carrinho</InverseOutlineButton>
           </Link>

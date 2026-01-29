@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { LightButton } from '../../styles/components';
 
 const Overlay = styled.main`
@@ -38,10 +39,12 @@ const Text = styled.p`
 `;
 
 function Confirmation() {
+  const orderId = useSelector((state) => state.order.orderId);
+
   return (
     <Overlay>
       <Panel>
-        <Title>Pedido realizado - ORDER_123</Title>
+        <Title>Pedido realizado - {orderId || 'SEM_ID'}</Title>
         <Text>
           Estamos felizes em informar que seu pedido ja esta em processo de
           preparacao e, em breve, sera entregue no endereco fornecido.
